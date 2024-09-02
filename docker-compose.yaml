@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.2
+    container_name: keycloak
+    user: "${UID}"
+    volumes:
+      - "./quarkus-realm.json:/opt/keycloak/data/import/quarkus-realm.json:Z"
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8180:8080"
+
+  postgres-reservation:
+    image: docker.io/library/postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_DB: quarkus
+      POSTGRES_USER: quarkus
+      POSTGRES_PASSWORD: quarkus
+    ports:
+      - "5432:5432"
+
